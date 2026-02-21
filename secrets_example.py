@@ -17,7 +17,11 @@ HA_TOKEN      = "your_long_lived_access_token"
 TIMEZONE_OFFSET = 2
 
 # Night mode — screen turns off during quiet hours
-# Set QUIET_START >= QUIET_END to wrap midnight (e.g. 23 to 7)
-QUIET_START   = 23   # hour to turn off (local time, 0-23)
-QUIET_END     = 7    # hour to turn back on (local time, 0-23)
-WAKE_DURATION = 300  # seconds to stay on after a touch (e.g. 300 = 5 minutes)
+#
+# If QUIET_START < QUIET_END  → same-day window, e.g. 1 and 9  = off from 01:00 to 09:00
+# If QUIET_START > QUIET_END  → wraps midnight,  e.g. 23 and 7 = off from 23:00 to 07:00
+# If QUIET_START == QUIET_END → quiet mode disabled entirely
+#
+QUIET_START   = 23   # hour to turn display off (local time, 0-23)
+QUIET_END     = 7    # hour to turn display on  (local time, 0-23)
+WAKE_DURATION = 300  # seconds to stay on after a touch during quiet hours (300 = 5 min)

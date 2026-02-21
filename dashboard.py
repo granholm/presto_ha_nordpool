@@ -147,10 +147,18 @@ def draw_text_centred(text, cx, y, scale=1):
 # Night mode helpers
 # ---------------------------------------------------------------------------
 def in_quiet_hours(h):
-    """Return True if hour h falls within the quiet period (handles midnight wrap)."""
-    if QUIET_START < QUIET_END:          # e.g. 02:00 – 07:00 (no midnight wrap)
+    """Return True if hour h falls within the quiet period.
+
+    Examples:
+      QUIET_START=1,  QUIET_END=9  → quiet from 01:00 to 09:00 (no midnight wrap)
+      QUIET_START=23, QUIET_END=7  → quiet from 23:00 to 07:00 (wraps midnight)
+      QUIET_START=0,  QUIET_END=0  → never quiet (disabled)
+    """
+    if QUIET_START == QUIET_END:         # disabled — never quiet
+        return False
+    elif QUIET_START < QUIET_END:        # e.g. 01:00–09:00, no midnight wrap
         return QUIET_START <= h < QUIET_END
-    else:                                # e.g. 23:00 – 07:00 (wraps midnight)
+    else:                                # e.g. 23:00–07:00, wraps midnight
         return h >= QUIET_START or h < QUIET_END
 
 def set_backlight(on):
@@ -338,7 +346,7 @@ else:
     cached_data      = None
     last_fetch_time  = -REFRESH_SECS   # force immediate fetch on first iteration
     screen_on        = True            # tracks current backlight state
-    woke_at          = None            # time.time() when screen was last woken by touch
+    woke_at          = time.time()     # treat boot as a touch-wake so quiet hours respect WAKE_DURATION
 
     set_backlight(True)
     touch = presto.touch   # FT6236 object, polled each iteration
@@ -359,11 +367,16 @@ else:
 
         # --- Decide whether screen should be on --------------------------------
         if quiet:
-            if screen_on and woke_at is not None:
-                # Turn off again once WAKE_DURATION has elapsed
-                if now_ticks - woke_at >= WAKE_DURATION:
+            if screen_on:
+                if woke_at is None:
+                    # Quiet hours just started (no touch-wake active) — turn off immediately
                     set_backlight(False)
                     screen_on = False
+                elif now_ticks - woke_at >= WAKE_DURATION:
+                    # Touch-wake timer has expired — turn off again
+                    set_backlight(False)
+                    screen_on = False
+                    woke_at = None
         else:
             # Outside quiet hours: always on
             if not screen_on:
