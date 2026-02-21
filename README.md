@@ -1,4 +1,4 @@
-# Nordpool Energy Price Dashboard
+# Pimoroni Presto Nordpool Energy Price Dashboard
 
 <img width="1735" height="1714" alt="image" src="https://github.com/user-attachments/assets/624e6cb6-7af0-4817-93a0-262a13d25651" />
 
