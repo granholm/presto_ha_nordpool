@@ -1,6 +1,8 @@
 # Pimoroni Presto Nordpool Energy Price Dashboard
 
-<img width="1735" height="1714" alt="image" src="https://github.com/user-attachments/assets/624e6cb6-7af0-4817-93a0-262a13d25651" />
+<img width="380" height="402" alt="image" src="https://github.com/user-attachments/assets/50e681ee-80ed-4ea3-a0a1-3b66fc660d3a" />
+
+
 
 A real-time electricity price dashboard for the [Pimoroni Presto](https://shop.pimoroni.com/products/presto), powered by the [Nordpool integration](https://github.com/custom-components/nordpool) for Home Assistant.
 
